@@ -83,12 +83,12 @@ ninja -C out.gn/$ARCH v8_monolith
 # ZIP
 
 cd $REPO
-find ~/v8/v8/out.gn/$ARCH -type f
 mkdir -p ~/v8_zip 1> nul
 cp -r ~/v8/v8/include ~/v8_zip 1> nul
 
 # Disable "exit on error"
 set +e
+find ~/v8/v8/out.gn/$ARCH -type f -maxdepth 1
 cp ~/v8/v8/out.gn/$ARCH/icudtl.dat ~/v8_zip
 cp ~/v8/v8/out.gn/$ARCH/obj/libv8_monolith.a ~/v8_zip
 cp ~/v8/v8/out.gn/$ARCH/obj/*.dylib ~/v8_zip
