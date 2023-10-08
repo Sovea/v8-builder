@@ -7,11 +7,11 @@
 **V8 is compiled as is**, without patches or changes of any kind.
 The version used to compile is the most recent stable shown at https://omahaproxy.appspot.com (as described [here](https://v8.dev/docs/source-code#source-code-branches)).
 
-V8 binaries are built for the following platforms:
-- Linux (x64)
-- Android (x86, x86-64, arm v7, arm v8)
-- macOS (x64)
-- Windows (x64)
+V8 binaries are built for the following platforms (or not):
+- Linux (armv7, arm64, x64, x86)
+- Android (armv7, arm64, x64, x86)
+- macOS (x64, arm64)
+- Windows (x64, x86, arm64)
 
 Headers are included!
 
