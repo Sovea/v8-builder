@@ -83,7 +83,7 @@ ninja -C out.gn/$ARCH v8_monolith
 # ZIP
 
 cd $REPO
-#find ~/v8/v8/out.gn/$ARCH -type f
+find ~/v8/v8/out.gn/$ARCH -type f
 mkdir -p ~/v8_zip 1> nul
 cp -r ~/v8/v8/include ~/v8_zip 1> nul
 
