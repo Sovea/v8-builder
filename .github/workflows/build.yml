@@ -10,7 +10,7 @@ jobs:
   build_gnu_linux:
     strategy:
       matrix:
-        platform: [android-armv7, android-arm64, android-x64, android-x86, linux-x64]
+        platform: [android-armv7, android-arm64, android-x64, android-x86, linux-armv7, linux-arm64, linux-x86, linux-x64]
     name: ${{ matrix.platform }}
     runs-on: ubuntu-latest
     steps:
@@ -32,6 +32,15 @@ jobs:
         if [ ${{ matrix.platform }} = "android-x86" ]; then
         _args+=" android ia32.release x86"
         fi
+        if [ ${{ matrix.platform }} = "linux-armv7" ]; then
+        _args+=" linux arm.release arm"
+        fi
+        if [ ${{ matrix.platform }} = "linux-arm64" ]; then
+        _args+=" linux arm64.release arm64"
+        fi
+        if [ ${{ matrix.platform }} = "linux-x86" ]; then
+        _args+=" linux ia32.release x86"
+        fi
         if [ ${{ matrix.platform }} = "linux-x64" ]; then
         _args+=" linux x64.release x64"
         fi
@@ -49,7 +58,7 @@ jobs:
   build_windows:
     strategy:
       matrix:
-        platform: [windows-x64]
+        platform: [windows-x64, windows-x86, windows-arm64]
     name: ${{ matrix.platform }}
     runs-on: windows-latest
     steps:
@@ -63,6 +72,12 @@ jobs:
         _args="${{github.event.release.tag_name}} $GITHUB_WORKSPACE ${{ matrix.platform }}"
         if [ ${{ matrix.platform }} = "windows-x64" ]; then
         _args+=" win x64.release x64"
+        fi
+        if [ ${{ matrix.platform }} = "windows-x86" ]; then
+        _args+=" win ia32.release x86"
+        fi
+        if [ ${{ matrix.platform }} = "windows-arm64" ]; then
+        _args+=" win arm64.release arm64"
         fi
         bash ./build.sh $_args
     - name: Upload Release Asset
@@ -78,7 +93,7 @@ jobs:
   build_mac:
     strategy:
       matrix:
-        platform: [mac-x64]
+        platform: [mac-x64, mac-arm64]
     name: ${{ matrix.platform }}
     runs-on: macos-latest
     steps:
@@ -91,6 +106,9 @@ jobs:
         _args="${{github.event.release.tag_name}} $GITHUB_WORKSPACE ${{ matrix.platform }}"
         if [ ${{ matrix.platform }} = "mac-x64" ]; then
         _args+=" mac x64.release x64"
+        fi
+        if [ ${{ matrix.platform }} = "mac-arm64" ]; then
+        _args+=" mac arm64.release arm64"
         fi
         bash ./build.sh $_args
     - name: Upload Release Asset
