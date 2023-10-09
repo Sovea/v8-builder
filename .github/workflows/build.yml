@@ -132,9 +132,10 @@ jobs:
         if [ ${{ github.event.inputs.platform }} = "mac-arm64" ]; then
           cd $GITHUB_WORKSPACE
           chmod +x ./build.sh
-          _args="${{ github.event.inputs.tag_name }} $GITHUB_WORKSPACE ${{ github.event.inputs.platform }}"
-          _args+=" mac arm64.release arm64 nomonolith"
-          bash ./build.sh "$_args"
+          _args_arm64="${{ github.event.inputs.tag_name }} $GITHUB_WORKSPACE ${{ github.event.inputs.platform }}"
+          _args_arm64+=" mac arm64.release arm64 nomonolith"
+          echo "_args_arm64: $_args_arm64"
+          bash -x ./build.sh $_args_arm64
         fi
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
