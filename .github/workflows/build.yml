@@ -120,17 +120,21 @@ jobs:
       shell: bash
       run: |
         if [ ${{ github.event.inputs.platform }} = "mac-x64" ]; then
+          cd $GITHUB_WORKSPACE
+          chmod +x ./build.sh
           _args="${{ github.event.inputs.tag_name }} $GITHUB_WORKSPACE ${{ github.event.inputs.platform }}"
           _args+=" mac x64.release x64 nomonolith"
-          bash ./build.sh $_args
+          bash ./build.sh "$_args"
         fi
     - name: Build (arm64)
       shell: bash
       run: |
         if [ ${{ github.event.inputs.platform }} = "mac-arm64" ]; then
+          cd $GITHUB_WORKSPACE
+          chmod +x ./build.sh
           _args="${{ github.event.inputs.tag_name }} $GITHUB_WORKSPACE ${{ github.event.inputs.platform }}"
           _args+=" mac arm64.release arm64 nomonolith"
-          bash ./build.sh $_args
+          bash ./build.sh "$_args"
         fi
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
