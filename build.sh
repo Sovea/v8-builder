@@ -66,6 +66,9 @@ if [[ "$SHORT_PLATFORM" == "linux" || "$SHORT_PLATFORM" == "android" ]]; then
 fi
 gclient sync
 
+if [ "$SHORT_PLATFORM" = "linux" ]; then
+./build/linux/sysroot_scripts/install-sysroot.py --arch=$SHORT_ARCH
+fi
 
 echo "=====[ Building V8 ]====="
 
@@ -89,7 +92,14 @@ cp -r ~/v8/v8/include ~/v8_zip 1> nul
 # Disable "exit on error"
 set +e
 find ~/v8/v8/out.gn/$ARCH -type f -maxdepth 1
+find ~/v8/v8/out.gn/$ARCH/obj -type f -maxdepth 1
+cp ~/v8/v8/out.gn/$ARCH/args.gn ~/v8_zip
 cp ~/v8/v8/out.gn/$ARCH/icudtl.dat ~/v8_zip
+cp ~/v8/v8/out.gn/$ARCH/*.exe ~/v8_zip
+cp ~/v8/v8/out.gn/$ARCH/*.pdb ~/v8_zip
+cp ~/v8/v8/out.gn/$ARCH/*.dll ~/v8_zip
+cp ~/v8/v8/out.gn/$ARCH/*.lib ~/v8_zip
+
 cp ~/v8/v8/out.gn/$ARCH/obj/libv8_monolith.a ~/v8_zip
 cp ~/v8/v8/out.gn/$ARCH/obj/*.dylib ~/v8_zip
 cp ~/v8/v8/out.gn/$ARCH/obj/v8_monolith.lib ~/v8_zip
