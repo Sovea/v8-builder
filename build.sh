@@ -9,6 +9,7 @@ PLATFORM=$3
 SHORT_PLATFORM=$4
 ARCH=$5
 SHORT_ARCH=$6
+BUILD_TYPE=$7
 
 # Conf
 if [[ "$SHORT_PLATFORM" == "linux" || "$SHORT_PLATFORM" == "android" ]]; then
@@ -51,6 +52,7 @@ else
 fi
 export PATH=$(pwd)/depot_tools:$PATH
 gclient
+update_depot_tools
 # Build
 
 mkdir v8
@@ -77,7 +79,7 @@ fi
 python ./tools/dev/v8gen.py $ARCH -vv --no-goma -- $ARGS target_os=\"$SHORT_PLATFORM\" target_cpu=\"$SHORT_ARCH\" v8_target_cpu=\"$SHORT_ARCH\" is_component_build=false use_goma=false v8_monolithic=true use_custom_libcxx=false v8_enable_sandbox=false v8_enable_i18n_support=true v8_use_external_startup_data=false
 
 ninja -C out.gn/$ARCH -t clean 1> nul
-ninja -C out.gn/$ARCH v8_monolith
+ninja -C out.gn/$ARCH
 
 
 # ZIP
@@ -90,15 +92,20 @@ cp -r ~/v8/v8/include ~/v8_zip 1> nul
 set +e
 find ~/v8/v8/out.gn/$ARCH -type f -maxdepth 1
 cp ~/v8/v8/out.gn/$ARCH/icudtl.dat ~/v8_zip
+if [ $BUILD_TYPE = "monolith" ]; then
 cp ~/v8/v8/out.gn/$ARCH/obj/libv8_monolith.a ~/v8_zip
-cp ~/v8/v8/out.gn/$ARCH/obj/*.dylib ~/v8_zip
 cp ~/v8/v8/out.gn/$ARCH/obj/v8_monolith.lib ~/v8_zip
+else
+cp ~/v8/v8/out.gn/$ARCH/obj/libv8*.a ~/v8_zip
+cp ~/v8/v8/out.gn/$ARCH/obj/v8*.lib ~/v8_zip
+fi
+cp ~/v8/v8/out.gn/$ARCH/obj/*.dylib ~/v8_zip
 # Enable "exit on error"
 set -e
 
 
 if [ $SHORT_PLATFORM != "win" ]; then
-zip -r v8_monolith_$PLATFORM.zip ~/v8_zip/* 1> nul
+zip -r v8_$PLATFORM.zip ~/v8_zip/* 1> nul
 else
-7z a v8_monolith_$PLATFORM.zip ~/v8_zip/* 1> nul
+7z a v8_$PLATFORM.zip ~/v8_zip/* 1> nul
 fi
