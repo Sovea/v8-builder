@@ -10,7 +10,7 @@ jobs:
   build_gnu_linux:
     strategy:
       matrix:
-        platform: [android-armv7, android-arm64, android-x64, android-x86, linux-armv7, linux-x86, linux-x64]
+        platform: [android-armv7, android-arm64, android-x64, android-x86, linux-armv7, linux-arm64, linux-x86, linux-x64]
     name: ${{ matrix.platform }}
     runs-on: ubuntu-latest
     steps:
@@ -34,6 +34,9 @@ jobs:
         fi
         if [ ${{ matrix.platform }} = "linux-armv7" ]; then
         _args+=" linux arm.release arm"
+        fi
+        if [ ${{ matrix.platform }} = "linux-arm64" ]; then
+        _args+=" linux arm64.release arm64"
         fi
         if [ ${{ matrix.platform }} = "linux-x86" ]; then
         _args+=" linux ia32.release x86"
